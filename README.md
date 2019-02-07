@@ -142,7 +142,7 @@ $ cd bin
 $ ./syn_cbta_demo
 ```
 Check the result at "/task_assignment/build/bin", the resut is the figure called "result_syn_cbta.jpg". Example of the result can be:
-<img src="/data/result_syn_cbta_png" align="middle" height="500" >
+<img src="/data/result_syn_cbta.png" align="middle" height="500" >
 
 #### Comments about result
 1. In this case, minimum radius of turn is defined as 3(units) for all vehicles in the group.
@@ -156,7 +156,7 @@ $ cd bin
 $ ./cbga_cbta_demo
 ```
 Check the result at "/task_assignment/build/bin", the resut is the figure called "result_cbga_cbta.jpg". Example of the result can be:
-<img src="/data/result_cbga_cbta_png" align="middle" height="500" >
+<img src="/data/result_cbga_cbta.png" align="middle" height="500" >
 
 #### Comments about result
 1. In this case, minimum radius of turn is defined as 3(units) for all vehicles in the group.
