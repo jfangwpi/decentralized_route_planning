@@ -24,5 +24,5 @@ target_include_directories(cbga PUBLIC
 #add_executable(test_cbga_wt test/test_cbga_wt.cpp)
 #target_link_libraries(test_cbga_wt cbga cbta cbba vis ltl map utility ${OpenCV_LIBS})
 
-#add_executable(test_cbga_cbta test/test_cbga_cbta.cpp)
-#target_link_libraries(test_cbga_cbta cbta cbba cbga vis map ltl utility ${OpenCV_LIBS})
+add_executable(test_cbga_cbta test/test_cbga_cbta.cpp)
+target_link_libraries(test_cbga_cbta cbta cbba cbga vis map ltl utility ${OpenCV_LIBS})

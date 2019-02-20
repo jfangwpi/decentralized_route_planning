@@ -156,6 +156,12 @@ int main(int argc, char** argv )
                 std::cout << b << ", ";
             }
             std::cout << std::endl;
+			std::cout << "current bundle is " << std::endl;
+			for (auto &b: agent.cbba_bundle_){
+                std::cout << b << ", ";
+            }
+            std::cout << std::endl;
+			std::cout << std::endl;
         }
 		
 		std::cout << std::endl;
@@ -175,6 +181,11 @@ int main(int argc, char** argv )
                 std::cout << b << ", ";
             }
             std::cout << std::endl;
+			std::cout << "current bundle is " << std::endl;
+			for (auto &b: agent.cbba_bundle_){
+                std::cout << b << ", ";
+            }
+            std::cout << std::endl;
         }
 
         TaskAssignment::path_remove_dependent(tasks, agents_group);
@@ -190,6 +201,11 @@ int main(int argc, char** argv )
 			std::cout << agent.iteration_neighbors_ << std::endl;
             std::cout << "current path is " << std::endl;
             for (auto &b: agent.cbba_path_){
+                std::cout << b << ", ";
+            }
+            std::cout << std::endl;
+			std::cout << "current bundle is " << std::endl;
+			for (auto &b: agent.cbba_bundle_){
                 std::cout << b << ", ";
             }
             std::cout << std::endl;

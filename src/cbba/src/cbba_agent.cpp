@@ -1053,6 +1053,9 @@ void Agent::optimal_group_finder(cbba_Task task){
 	if (assignment_matrix_(task.idx_, idx_) == 0){
 		winning_bids_matrix_(task.idx_, idx_) = 0.0;
 	}
+
+	// history_.assignment_.push_back(assignment_matrix_);
+	// history_.winning_bids_.push_back(winning_bids_matrix_);
 }
 
 /*** Find the lists of index of vehicles with given list of bids ***/
@@ -1099,7 +1102,7 @@ void Agent::path_remove_dependent(TasksList tasks){
 		}
 
 		if(task.num_agents_ > 1 && outbidForTask == 1){
-			// cbba_path_[t_idx] = -1;
+			cbba_path_[t_idx] = -1;
 			winning_bids_matrix_(task.idx_, idx_) = 0.0;
 			assignment_matrix_(task.idx_, idx_) = 0;
 		}
@@ -1152,14 +1155,20 @@ void TaskAssignment::communicate_dependent(std::vector<Agent>& agents, TasksList
 					if(task.num_agents_ > 1){
 						if(i != agent.idx_ && i != neighbor.idx_ && neighbor.history_.iter_neighbors_his.back()(0, i) >= agent.iteration_neighbors_(0, i)){
 							agent.winning_bids_matrix_(task.idx_, i) = neighbor.history_.winning_bids_.back()(task.idx_,i);	
+							// agent.winning_bids_matrix_(task.idx_, i) = neighbor.winning_bids_matrix_(task.idx_, i);
 						}
 						else if(i == neighbor.idx_){
-							agent.winning_bids_matrix_(task.idx_, i) = neighbor.history_.winning_bids_.back()(task.idx_,i);
+							// agent.winning_bids_matrix_(task.idx_, i) = neighbor.history_.winning_bids_.back()(task.idx_,i);
+							agent.winning_bids_matrix_(task.idx_, i) = neighbor.winning_bids_matrix_(task.idx_, i);
 						}
 					}
 				}
-				if (i != agent.idx_ && agent.iteration_neighbors_(0, i) <= neighbor.history_.iter_neighbors_his.back()(0, i)){
+				if (i != agent.idx_ && i != neighbor.idx_ && agent.iteration_neighbors_(0, i) <= neighbor.history_.iter_neighbors_his.back()(0, i)){
 					agent.iteration_neighbors_(0, i) = neighbor.history_.iter_neighbors_his.back()(0, i);
+					// agent.iteration_neighbors_(0, i) = neighbor.iteration_neighbors_(0,i);
+				}
+				else if(i == neighbor.idx_){
+					agent.iteration_neighbors_(0, i) = neighbor.iteration_neighbors_(0, i); 
 				}
 			}
 			// std::cout << "The result for vehicle " << agent.idx_ << " talking to neighbor " << neighbor.idx_ << " is: " << std::endl;

@@ -30,8 +30,13 @@ using namespace librav;
 
 int main(int argc, char** argv){
    	/*** 0. Preprocessing CBTA data ***/
-	double r_min = 4;
-	TileTraversalData tile_traversal_data = HCost::hcost_preprocessing(r_min);
+	std::vector<double> radius_ = {4, 3, 3, 2};
+	std::map<int, TileTraversalData> tile_travelsal_data;
+	int idx = 0;
+	for(auto &r_min: radius_){
+		tile_travelsal_data[idx] = HCost::hcost_preprocessing(r_min);
+		idx++;
+	}
 
     /************************************************************************************************************/
 	/*********************************          Initialize: Map         *****************************************/
@@ -73,7 +78,7 @@ int main(int argc, char** argv){
 	/*** 5. Start CBGA ***/
 	bool flag = false;
 	while(flag == false){
-		CBGA::bundle_construction(tasks, Global_LTL, grid_graph, lifted_graph, tile_traversal_data, grid, agents);
+		CBGA::bundle_construction(tasks, Global_LTL, grid_graph, lifted_graph, tile_travelsal_data, grid, agents);
 		
 		// Increase the iteration
 		for (int i = 0; i < agents[0].num_agents_; i++){
@@ -103,5 +108,72 @@ int main(int argc, char** argv){
 		// std::cout << "assignment matrix is " << std::endl;
 		// std::cout << agent.assignment_matrix_ << std::endl;
 	}
+
+
+	int num_agents = 4;
+	Path_t<SquareCell*> path_origin[num_agents];
+	std::vector<std::string> buchi_regions;
+	buchi_regions.push_back("p0");
+	buchi_regions.push_back("p1");
+	buchi_regions.push_back("p2");
+	buchi_regions.push_back("p3");
+	buchi_regions.push_back("p4");
+	buchi_regions.push_back("p5");
+	buchi_regions.push_back("p6");
+	buchi_regions.push_back("p7");
+	buchi_regions.push_back("p8");
+
+	for (auto it_ag = agents.begin(); it_ag != agents.end(); it_ag++){
+		
+		/*** 8.1 Rebuild the local LTL specification based on current bundle/path ***/
+		std::string ltl_formula = tasks.local_formula_recreator((*it_ag).cbga_path_);
+		std::cout << "The specification is " << ltl_formula << std::endl;
+		// std::vector<std::vector<std::string>> buchi_regions = LTLDecomposition::ObtainBuchiRegion({ltl_formula});
+
+		/*** 8.2 Generate the corresponding buchi regions ***/
+        std::shared_ptr<Graph_t<BuchiState *, std::vector<int64_t>>> buchi_graph = BuchiAutomaton::BuildBuchiGraph(ltl_formula,buchi_regions);
+        std::vector<int64_t> buchi_acc = (*buchi_graph->FindVertex(0)).state_->acc_state_idx;
+		//std::shared_ptr<Graph_t<BuchiState>> buchi_graph = BuchiAutomaton::CreateBuchiGraph(ltl_formula,buchi_regions.front());
+
+		/*** 8.4 Construct a product graph ***/
+        std::shared_ptr<Graph_t<ProductState *>> product_graph = std::make_shared<Graph_t<ProductState *>>();
+        int64_t start_id_grid = (*it_ag).init_pos_;
+        int64_t virtual_start_state_id = ProductAutomaton::SetVirtualStartState(product_graph, buchi_graph, grid_graph, start_id_grid);
+		//std::shared_ptr<Graph_t<ProductState>> product_graph_new = std::make_shared<Graph_t<ProductState>>();
+
+        GetProductNeighbor product_neighbor(grid_graph, buchi_graph);
+        auto path = AStar::ProductIncSearch(product_graph, virtual_start_state_id, buchi_acc, GetNeighbourFunc_t<ProductState*, double>(product_neighbor));
+        
+		if (!(*it_ag).cbga_path_.empty()){
+        	for(auto &e: path){
+            	path_origin[(*it_ag).idx_].push_back(e->grid_vertex_->state_);
+       	 	}
+			std::cout << "The path length for vehicle "  << (*it_ag).idx_ << " is " << path_origin[(*it_ag).idx_].size() << std::endl;
+		}
+		else{
+			path_origin[(*it_ag).idx_].push_back(path[0]->grid_vertex_->state_);
+		}
+		
+	}
+
+
+
+	/*** 9.Visualize the map and graph ***/
+	// Image Layouts: square grid -> graph -> path
+	GraphVis vis;
+	Mat vis_img;
+	vis.VisSquareGrid(*grid, vis_img);
+	vis.VisSquareGridGraph(*grid_graph, vis_img, vis_img, false);
+	// // put the path on top of the graph
+	vis.VisSquareGridPath(path_origin[0], vis_img, vis_img, 0);
+	vis.VisSquareGridPath(path_origin[1], vis_img, vis_img, 1);
+	vis.VisSquareGridPath(path_origin[2], vis_img, vis_img, 2);
+	vis.VisSquareGridPath(path_origin[3], vis_img, vis_img, 3);
+
+	// display visualization result
+	namedWindow("Processed Image", WINDOW_NORMAL ); // WINDOW_AUTOSIZE
+	imshow("Processed Image", vis_img);
+	imwrite("result_cbga_cbta.jpg",vis_img);
+
 	return 0;	
 }

@@ -131,6 +131,10 @@ namespace CBGA
 	void bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std::shared_ptr<Graph_t<SquareCell*>> graph,
 		std::shared_ptr<Graph_t<LiftedSquareCell *>> lifted_graph, TileTraversalData tile_traversal_data, 
         std::shared_ptr<SquareGrid> grid, std::vector<cbga_Agent>& agents);
+
+	void bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std::shared_ptr<Graph_t<SquareCell*>> graph,
+		std::shared_ptr<Graph_t<LiftedSquareCell *>> lifted_graph, std::map<int, TileTraversalData> tile_traversal_data, 
+        std::shared_ptr<SquareGrid> grid, std::vector<cbga_Agent>& agents);
 	
 	bool success_checker(std::vector<cbga_Agent>& agents, CBGATasks tasks);
 	void communicate(std::vector<cbga_Agent>& agents, cbga_Task task);

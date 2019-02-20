@@ -82,11 +82,11 @@ std::vector<cbga_Agent> CBGA::InitializeAgents(){
 
 // Update the bids for vehicle i
 void cbga_Agent::bids_update(CBGATasks tasks_group, const std::shared_ptr<Graph_t<SquareCell*>> graph){
-    std::cout << "Before bids_update, the bundle info is " << std::endl;
-    for(auto &e: cbga_bundle_){
-        std::cout << e << " ";
-    }
-    std::cout << std::endl;
+    // std::cout << "Before bids_update, the bundle info is " << std::endl;
+    // for(auto &e: cbga_bundle_){
+    //     std::cout << e << " ";
+    // }
+    // std::cout << std::endl;
     // Find all tasks which have not been inserted into t he bundle (path)
     std::vector<int> tasks_NotInBundle = {};
     for (int task_idx = 0; task_idx < num_tasks_; task_idx++){
@@ -109,11 +109,11 @@ void cbga_Agent::bids_update(CBGATasks tasks_group, const std::shared_ptr<Graph_
         /*** Compute the bid for each insert case ***/
         std::vector<double> bids(path_copy.size(), 0.0);
         for (int i = 0; i < path_copy.size(); i++){
-            std::cout << "currently the path_copy is " << std::endl;
-            for (auto &e: path_copy[i]){
-                std::cout << e << " ";
-            }
-            std::cout << std::endl;
+            // std::cout << "currently the path_copy is " << std::endl;
+            // for (auto &e: path_copy[i]){
+            //     std::cout << e << " ";
+            // }
+            // std::cout << std::endl;
             // bids[i] = CBGA::ScoreCalculation(tasks_group, graph, path_copy[i], this) - origin_score;
             // bids[i] = CBGA::ScoreCalculation(tasks_group, graph, path_copy[i], this);
             bids[i] = reward_benefit - CBGA::PathLengthCalculationBasedType(tasks_group, graph, path_copy[i], init_pos_);   
@@ -266,9 +266,9 @@ double CBGA::ScoreCalculation(CBGATasks tasks,std::shared_ptr<Graph_t<SquareCell
     //     std::vector<int> bundle(first_, last_);
 
     /*** Compute the distance for each task i in the bundle and compute the sum of them which is the score with given bundle ***/
-    std::cout << "The start id is " << (*agent).idx_ << std::endl;
+    // std::cout << "The start id is " << (*agent).idx_ << std::endl;
     score = reward_benefit - CBGA::PathLengthCalculationBasedType(tasks, graph, bundle, (*agent).idx_);
-    std::cout << "score is " << score << std::endl;
+    // std::cout << "score is " << score << std::endl;
     // }
 
     return score;
@@ -373,11 +373,11 @@ double CBGA::PathLengthCalculationBasedType(CBGATasks tasks, std::shared_ptr<Gra
 		}
 		else if (task.type_ ==  TaskType::SEARCH){
 			if (task.pos_.size() != task.buchi_regions_.size()){
-				std::cout << "Target not found " << std::endl;
+				// std::cout << "Target not found " << std::endl;
 				pos_seq.push_back(task.pos_[0]);
 			}
 			else{
-				std::cout << "Target found " << std::endl;
+				// std::cout << "Target found " << std::endl;
 				flag = true;
 				final_pos = task.pos_.back();
 				pos_seq.push_back(task.pos_[0]);
@@ -391,7 +391,7 @@ double CBGA::PathLengthCalculationBasedType(CBGATasks tasks, std::shared_ptr<Gra
 
    
 	start_node = graph->GetVertexFromID(start_idx_);
-     std::cout << "The start node is " << start_node->state_->id_ << std::endl;
+    //  std::cout << "The start node is " << start_node->state_->id_ << std::endl;
 	for (int k = 0; k < pos_seq.size(); k++){
 		finish_node = graph->GetVertexFromID(pos_seq[k]);
 		path_part = AStar::Search(graph,start_node->state_->id_,finish_node->state_->id_, CalcHeuristicFunc_t<SquareCell *>(CBGA::CalcHeuristic));
@@ -571,8 +571,8 @@ void CBGA::path_remove(std::vector<cbga_Agent>& agents){
 
 
 void CBGA::bundle_construction(CBGATasks tasks, std::shared_ptr<Graph_t<SquareCell*>> graph, cbga_Agent& agent){
-    std::cout << "==========================================================================================" << std::endl;
-    std::cout << "bundle constructure " << std::endl;
+    // std::cout << "==========================================================================================" << std::endl;
+    // std::cout << "bundle constructure " << std::endl;
     bool bundle_full = 0;
     if(agent.cbga_bundle_.size() >= agent.max_tasks_){
         bundle_full = 1;
@@ -644,17 +644,17 @@ void CBGA::bundle_construction(CBGATasks tasks, std::shared_ptr<Graph_t<SquareCe
 
         agent.cbga_bundle_.push_back(desired_task_idx);
 
-        std::cout << "Now the bundle becomes " << std::endl;
-        for (auto &e: agent.cbga_bundle_){
-            std::cout << e << " ";
-        }
-        std::cout << std::endl;
+        // std::cout << "Now the bundle becomes " << std::endl;
+        // for (auto &e: agent.cbga_bundle_){
+        //     std::cout << e << " ";
+        // }
+        // std::cout << std::endl;
 
-        std::cout << "Now the path becomes " << std::endl;
-        for (auto &e: agent.cbga_path_){
-            std::cout << e << " ";
-        }
-        std::cout << std::endl;
+        // std::cout << "Now the path becomes " << std::endl;
+        // for (auto &e: agent.cbga_path_){
+        //     std::cout << e << " ";
+        // }
+        // std::cout << std::endl;
 
 
         if(agent.cbga_bundle_.size() > agent.max_tasks_){
@@ -669,7 +669,7 @@ void CBGA::bundle_construction(CBGATasks tasks, std::shared_ptr<Graph_t<SquareCe
     agent.history_.winning_bids_.push_back(agent.winning_bids_matrix_);
     agent.history_.assignment_.push_back(agent.assignment_matrix_);
 
-    std::cout << "==========================================================================================" << std::endl;
+    // std::cout << "==========================================================================================" << std::endl;
 }
 
 void CBGA::bundle_construction(CBGATasks tasks, std::shared_ptr<Graph_t<SquareCell*>> graph, std::vector<cbga_Agent>& agents){
@@ -691,8 +691,8 @@ void CBGA::bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std:
 void CBGA::bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std::shared_ptr<Graph_t<SquareCell*>> graph,
 		std::shared_ptr<Graph_t<LiftedSquareCell *>> lifted_graph, TileTraversalData tile_traversal_data, 
         std::shared_ptr<SquareGrid> grid, cbga_Agent& agent){
-            std::cout << "=================================================================================== " << std::endl;
-            std::cout << "bundle construction " << std::endl;
+            // std::cout << "=================================================================================== " << std::endl;
+            // std::cout << "bundle construction " << std::endl;
             bool bundle_full = 0;
             if (agent.cbga_bundle_.size() >= agent.max_tasks_){
                 bundle_full = 1;
@@ -751,17 +751,17 @@ void CBGA::bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std:
 
                 agent.cbga_bundle_.push_back(desired_task_idx);
 
-                std::cout << "Now the bundle becomes " << std::endl;
-                for (auto &e: agent.cbga_bundle_){
-                    std::cout << e << " ";
-                }
-                std::cout << std::endl;
+                // std::cout << "Now the bundle becomes " << std::endl;
+                // for (auto &e: agent.cbga_bundle_){
+                //     std::cout << e << " ";
+                // }
+                // std::cout << std::endl;
 
-                std::cout << "Now the path becomes " << std::endl;
-                for (auto &e: agent.cbga_path_){
-                    std::cout << e << " ";
-                }
-                std::cout << std::endl;
+                // std::cout << "Now the path becomes " << std::endl;
+                // for (auto &e: agent.cbga_path_){
+                //     std::cout << e << " ";
+                // }
+                // std::cout << std::endl;
 
                 if (agent.cbga_bundle_.size() > agent.max_tasks_){
                     bundle_full = 1;
@@ -772,9 +772,17 @@ void CBGA::bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std:
             agent.history_.winning_bids_.push_back(agent.winning_bids_matrix_);
             agent.history_.assignment_.push_back(agent.assignment_matrix_);
 
-            std::cout << "==========================================================================================" << std::endl;
+            // std::cout << "==========================================================================================" << std::endl;
 
 }
+
+void CBGA::bundle_construction(CBGATasks tasks, LTLFormula Global_LTL,const std::shared_ptr<Graph_t<SquareCell*>> graph,
+		std::shared_ptr<Graph_t<LiftedSquareCell *>> lifted_graph, std::map<int, TileTraversalData> tile_traversal_data, 
+        std::shared_ptr<SquareGrid> grid, std::vector<cbga_Agent>& agents){
+            for (auto &agent: agents){
+                CBGA::bundle_construction(tasks, Global_LTL, graph,lifted_graph,tile_traversal_data[agent.idx_],grid, agent);
+            }
+        }
 
 
 // void CBGA::update_rewards(CBGATasks tasks_group, cbga_Agent& agent,  std::shared_ptr<Graph_t<SquareCell*>> graph){
@@ -899,13 +907,13 @@ void CBGA::communicate(std::vector<cbga_Agent>& agents, cbga_Task task){
                 }
             }
 
-            std::cout << "Before communicate " << std::endl;
-            std::cout << "Agent info is " << std::endl;
-            std::cout << agent.history_.winning_bids_.back() << std::endl;
-            std::cout << agent.history_.assignment_.back() << std::endl;
-            std::cout << "neighbor info is " << std::endl;
-            std::cout << neighbor.winning_bids_matrix_ << std::endl;
-            std::cout << neighbor.assignment_matrix_ << std::endl;
+            // std::cout << "Before communicate " << std::endl;
+            // std::cout << "Agent info is " << std::endl;
+            // std::cout << agent.history_.winning_bids_.back() << std::endl;
+            // std::cout << agent.history_.assignment_.back() << std::endl;
+            // std::cout << "neighbor info is " << std::endl;
+            // std::cout << neighbor.winning_bids_matrix_ << std::endl;
+            // std::cout << neighbor.assignment_matrix_ << std::endl;
 
             // Entried 1 to 4
             // If current agent k thinks that the winner of task j is itself k
@@ -1220,17 +1228,10 @@ void CBGA::communicate(std::vector<cbga_Agent>& agents, cbga_Task task){
             else{
                 std::cout << "Unknown case 5 " << std::endl;
             }
-
-
-
-            std::cout << "After communicate " << std::endl;
-            std::cout << "neighbor info is " << std::endl;
-            std::cout << neighbor.winning_bids_matrix_ << std::endl;
-            std::cout << neighbor.assignment_matrix_ << std::endl;
-
-
-
-
+            // std::cout << "After communicate " << std::endl;
+            // std::cout << "neighbor info is " << std::endl;
+            // std::cout << neighbor.winning_bids_matrix_ << std::endl;
+            // std::cout << neighbor.assignment_matrix_ << std::endl;
         }
     }
     
@@ -1285,21 +1286,21 @@ void CBGA::communicate_dependent(std::vector<cbga_Agent>& agents, cbga_Task task
                 }
             }
 
-            std::cout << "*******************************************************" << std::endl;
-            std::cout << "Before communicate dependent " << std::endl;
-            std::cout << "Agent is " << agent.idx_ << std::endl;
-            std::cout << agent.winning_bids_matrix_ << std::endl;
-            std::cout << agent.assignment_matrix_ << std::endl;
+            // std::cout << "*******************************************************" << std::endl;
+            // std::cout << "Before communicate dependent " << std::endl;
+            // std::cout << "Agent is " << agent.idx_ << std::endl;
+            // std::cout << agent.winning_bids_matrix_ << std::endl;
+            // std::cout << agent.assignment_matrix_ << std::endl;
 
-            std::cout << "Neighbor " << neighbor.idx_ << std::endl;
-            std::cout << neighbor.history_.winning_bids_.back() << std::endl;
-            std::cout << neighbor.history_.assignment_.back() << std::endl;
+            // std::cout << "Neighbor " << neighbor.idx_ << std::endl;
+            // std::cout << neighbor.history_.winning_bids_.back() << std::endl;
+            // std::cout << neighbor.history_.assignment_.back() << std::endl;
 
             for (auto &assigned_idx: winners_idx_agent){
                 if (assigned_idx == neighbor.idx_ || neighbor.history_.iter_neighbors_his.back()[assigned_idx] > agent.iteration_neighbors_[assigned_idx]){
                     if(assigned_idx != agent.idx_){
-                        std::cout << "assigned_idx " << assigned_idx << std::endl;
-                        std::cout << "dependent case 1 " << std::endl;
+                        // std::cout << "assigned_idx " << assigned_idx << std::endl;
+                        // std::cout << "dependent case 1 " << std::endl;
                         agent.winning_bids_matrix_(task.idx_, assigned_idx) = neighbor.history_.winning_bids_.back()(task.idx_, assigned_idx);
                         agent.assignment_matrix_(task.idx_, assigned_idx) = neighbor.history_.assignment_.back()(task.idx_, assigned_idx);
                     } 
@@ -1333,16 +1334,16 @@ void CBGA::communicate_dependent(std::vector<cbga_Agent>& agents, cbga_Task task
                 if(assigned_idx != agent.idx_ && agent.assignment_matrix_(task.idx_, assigned_idx) == 0 && neighbor.history_.iter_neighbors_his.back()[assigned_idx] > agent.iteration_neighbors_[assigned_idx]){
                     if (winners_idx_agent.size() < task.num_agents_){
                         if (assigned_idx != agent.idx_){
-                            std::cout << "dependent case 2 " << std::endl;
+                            // std::cout << "dependent case 2 " << std::endl;
                             agent.winning_bids_matrix_(task.idx_, assigned_idx) = neighbor.history_.winning_bids_.back()(task.idx_, assigned_idx);
                             agent.assignment_matrix_(task.idx_, assigned_idx) = neighbor.history_.assignment_.back()(task.idx_, assigned_idx);
                         }
                     }
                     else if(neighbor.history_.winning_bids_.back()(task.idx_, assigned_idx) > bid_min){
-                        std::cout << "vehicle " << agent.idx_ << std::endl;
-                        std::cout << "idx_n removed is " << idx_n << std::endl;
-                        std::cout << "assigned_idx " << assigned_idx << std::endl;
-                        std::cout << "dependent case 3 " << std::endl;
+                        // std::cout << "vehicle " << agent.idx_ << std::endl;
+                        // std::cout << "idx_n removed is " << idx_n << std::endl;
+                        // std::cout << "assigned_idx " << assigned_idx << std::endl;
+                        // std::cout << "dependent case 3 " << std::endl;
                         agent.winning_bids_matrix_(task.idx_, idx_n) = 0;
                         agent.assignment_matrix_(task.idx_, idx_n) = 0;
 
@@ -1373,10 +1374,10 @@ void CBGA::communicate_dependent(std::vector<cbga_Agent>& agents, cbga_Task task
                 }
             }
 
-            std::cout << "After communicate +++++++++++++++++++++++++++++ " << std::endl;
-            std::cout << "agent " << agent.idx_ << std::endl;
-            std::cout << agent.winning_bids_matrix_ << std::endl;
-            std::cout << agent.assignment_matrix_ << std::endl;
+            // std::cout << "After communicate +++++++++++++++++++++++++++++ " << std::endl;
+            // std::cout << "agent " << agent.idx_ << std::endl;
+            // std::cout << agent.winning_bids_matrix_ << std::endl;
+            // std::cout << agent.assignment_matrix_ << std::endl;
 
         } 
     }
@@ -1407,8 +1408,8 @@ double CBGA::WaitingTimeCalculation(std::shared_ptr<Graph_t<SquareCell*>> graph,
 	std::vector<int> dep_list;
 	// Prepare tasks path only contain dependent tasks
 	std::map<int, std::vector<int>> vehicle_path;
-    int num_tasks_de_ = 2;
-    int num_tasks_inde_ = 4;
+    int num_tasks_de_ = 6;
+    int num_tasks_inde_ = 6;
 
 	while (dep_list.size() != num_tasks_de_){
 		std::vector<int> first_tasks = {};
